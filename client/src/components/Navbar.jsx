@@ -52,7 +52,7 @@ function Navbar() {
         <nav className={`nav-bar ${isActive ? "active" : ""}`}>
           <Link to={"/"}>About</Link>
           <Link to={"/"}>Contact</Link>
-          {!isAuthenticated ? <><Link to={"/login"}>Login In</Link>
+          {!isAuthenticated ? <><Link to={"/login"}>Login</Link>
           <Link to={"/signup"}>Sign Up</Link></> : <Link to={`/${role}/profile`}>Profile</Link>}
         </nav>
         <IoMenu className='header-menu' onClick={() => setIsActive(!isActive)}/>
