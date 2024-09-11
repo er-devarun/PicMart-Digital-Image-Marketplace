@@ -21,10 +21,11 @@ function DashboardSidebar() {
     const dispatch = useDispatch();
     const {pathname} = useLocation();
     const navigate = useNavigate();
+    const role = useSelector(state => state.auth.role)
 
-    // useEffect(() => {
-    //   pathname === "/seller/profile" ? dispatch(setTab("photos-management")) : dispatch(setTab("photos-purchased"));
-    // }, []);
+    useEffect(() => {
+      dispatch(setTab(role === "seller" ? "photos-management" : "photos-purchased"));
+    }, []);
 
     async function handleSwitchProfile(){
       try {
@@ -35,6 +36,7 @@ function DashboardSidebar() {
         })
 
         const data = await res.data;
+        console.log("switch profile = ", data);
         if(data.success){
           toast.success(data.message);
           dispatch(login(data));

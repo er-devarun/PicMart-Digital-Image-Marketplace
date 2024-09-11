@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { login, logout } from '../store/slices/authSlice';
 import { IoMenu } from "react-icons/io5";
 import toast from 'react-hot-toast';
+import { setTab } from '../store/slices/navSlice';
 
 function Navbar() {
   const {pathname} = useLocation();
@@ -53,7 +54,7 @@ function Navbar() {
           <Link to={"/"}>About</Link>
           <Link to={"/"}>Contact</Link>
           {!isAuthenticated ? <><Link to={"/login"}>Login</Link>
-          <Link to={"/signup"}>Sign Up</Link></> : <Link to={`/${role}/profile`}>Profile</Link>}
+          <Link to={"/signup"}>Sign Up</Link></> : <Link to={`/${role}/profile`} onClick={() => dispatch(setTab(role == "seller" ? "photos-management" : "photos-purchased"))}>Profile</Link>}
         </nav>
         <IoMenu className='header-menu' onClick={() => setIsActive(!isActive)}/>
       </div>

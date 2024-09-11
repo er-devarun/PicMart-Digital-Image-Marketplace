@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ImageCard from './ImageCard';
 import { FaShoppingCart } from "react-icons/fa";
 import { IoIosHeart } from "react-icons/io";
@@ -7,24 +7,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAllPosts } from '../store/slices/postSlice';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import ShimmerLoading from './ShimmerLoading';
 
 function PhotoGallery() {
   const allPosts = useSelector(state => state.post.allPosts);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [visibleItems, setVisibleItmes] = useState(9);
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleLoadMoreBtn(){
+    setVisibleItmes((preState) => preState + 9);
+  }
 
   async function getAllPosts(){
     if(allPosts.length > 0){
+      setIsLoading(false);
       return;
     }
 
+    setIsLoading(true);
     try {
       const res = await axios.get(import.meta.env.VITE_API_URL+"/post/getAll");
       const data = res.data;
       if(data.success == true){
         console.log(data);
         dispatch(setAllPosts(data.data));
+        setIsLoading(false);
       }
     } catch (error) {
       console.log("Error is ", error);
@@ -119,9 +129,12 @@ function PhotoGallery() {
   return (
     <div className='photo-gallery'>
       <h3>Photo Gallery</h3>
+      {isLoading ? <ShimmerLoading/> : 
       <div className="gallery">
-        {allPosts?.map(({_id, image, title, price, author, authorId}) => <ImageCard key={_id} id={_id} img={image} title={title} price={price} author={author} authorId={authorId} icon1={<FaShoppingCart title='Cart' onClick={() => purchaseImage(price, _id, image, author, title)}  className='icon'/>} icon2={<IoIosHeart className='icon heart'/>} purchaseImage={purchaseImage}/>)}
+      {allPosts?.slice(0, visibleItems).map(({_id, image, title, price, author, authorId}) => <ImageCard key={_id} id={_id} img={image} title={title} price={price} author={author} authorId={authorId} icon1={<FaShoppingCart title='Cart' onClick={() => purchaseImage(price, _id, image, author, title)}  className='icon'/>} icon2={<IoIosHeart className='icon heart'/>} purchaseImage={purchaseImage}/>)}
       </div>
+      }
+      <button className='load-more-btn' style={{display: visibleItems >= allPosts.length && "none"}} onClick={handleLoadMoreBtn}>Load More</button>
     </div>
   )
 }

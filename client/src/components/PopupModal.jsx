@@ -43,13 +43,13 @@ function PopupModal({ isOpen, img, title, price, author, authorId, icon1, icon2,
           <hr />
           <div className='info-container'>
               <div className="author-info">
-                  <div className='b1'>@{author.charAt(0).toUpperCase()}</div>
+                  <div className='b1'>{author.charAt(0).toUpperCase()}</div>
                   <div className='b2'>{author.charAt(0).toUpperCase() + author.slice(1)}</div>
               </div>
   
               <div className="image-info">
                   <div className='like-icon' onClick={() => {pathname == "/buyer/profile" ? downloadImage(img, title) : pathname == "/" && addToFavourites(authorId, id)}}>
-                   {icon2} { pathname == "/seller/profile" ? "Likes" : pathname == "/buyer/profile" ? "Download" : "Likes"}
+                   {icon2} { pathname == "/seller/profile" ? "Favourite" : pathname == "/buyer/profile" ? "Download" : "Favourite"}
                   </div>
 
                   { pathname == "/" &&  <div className='purchase-icon' onClick={() => purchaseImage(price, id, img, author, title)}>

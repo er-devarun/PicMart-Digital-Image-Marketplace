@@ -16,7 +16,6 @@ const verifyToken = async (req, res, next) => {
       req.id = user.id;
       req.author = user.author;
       req.accountType = user.accountType;
-
       next();
     });
   } catch (error) {
